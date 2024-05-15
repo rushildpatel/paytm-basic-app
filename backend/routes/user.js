@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const zod = require("zod");
 const router = express.Router();
-const { User } = require("../models/db");
+const { User, Account } = require("../models/db");
 const jwt = require("jsonwebtoken");
 const { authMiddleware } = require("../middleware");
 // const bcrypt = require("bcrypt");
@@ -43,7 +43,12 @@ router.post("/signup", async (req, res) => {
     password: password,
   });
 
-  const newUserId = newUser._id;
+  const userId = newUser._id;
+
+  const newUserAccount = await Account.create({
+    userId: userId,
+    balance: Math.floor(Math.random() * 10000) + 1,
+  });
 
   const token = jwt.sign(
     {
