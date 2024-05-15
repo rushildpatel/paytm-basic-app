@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// using the routes of rootRouter
+// using the routes of rootRouter which further has routers for /user and /account
 app.use("/api/v1", rootRouter);
 
 // listen for requests
