@@ -8,8 +8,13 @@ const { authMiddleware } = require("../middleware");
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  console.log("/api/v1" + req.path, req.method);
+  next();
+});
+
 //route to different routers further
 router.use("/user", userRouter);
-router.use("/accounts", accountRouter);
+router.use("/account", accountRouter);
 
 module.exports = router;

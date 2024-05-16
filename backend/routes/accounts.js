@@ -2,17 +2,17 @@ const express = require("express");
 const { User, Account } = require("../models/db");
 const zod = require("zod");
 const mongoose = require("mongoose");
-
 const { authMiddleware } = require("../middleware");
-const router = require(".");
-const accountRouter = express.Router();
+
+const router = express.Router();
 
 /////// get balance of any user
 router.get("/balance", authMiddleware, async (req, res) => {
-  const userId = req.userId;
-  const account = await Account.findOne({ userId: userId });
+  const account = await Account.findOne({
+    userId: req.userId,
+  });
 
-  return res.status(200).json({
+  res.json({
     balance: account.balance,
   });
 });
@@ -30,20 +30,12 @@ router.get("/balance", authMiddleware, async (req, res) => {
 
 /////// transfer money from user1 acc --> user2 acc
 router.post("/transfer", authMiddleware, async (req, res) => {
-  //   const { success } = transferSchema.safeParse(req.body);
-  //   if (!success) {
-  //     return res.status(400).json({
-  //       message: "transfer unsuccessful",
-  //     });
-  //   }
-
   const session = await mongoose.startSession();
+
+  session.startTransaction();
   const { amount, to } = req.body;
 
-  console.log("starting transaction!");
-  session.startTransaction();
-
-  // fetch sender account
+  // Fetch the accounts within the transaction
   const account = await Account.findOne({ userId: req.userId }).session(session);
 
   if (!account || account.balance < amount) {
@@ -53,8 +45,8 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     });
   }
 
-  // fetch reciever account
-  const toAccount = await Account.findOne({ userId: to });
+  const toAccount = await Account.findOne({ userId: to }).session(session);
+
   if (!toAccount) {
     await session.abortTransaction();
     return res.status(400).json({
@@ -62,16 +54,15 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     });
   }
 
-  // transfer
+  // Perform the transfer
   await Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount } }).session(session);
   await Account.updateOne({ userId: to }, { $inc: { balance: amount } }).session(session);
 
+  // Commit the transaction
   await session.commitTransaction();
-  console.log("transfer transaction completed");
-
-  res.status(200).json({
+  res.json({
     message: "Transfer successful",
   });
 });
 
-module.exports = accountRouter;
+module.exports = router;

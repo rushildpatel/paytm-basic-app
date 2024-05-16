@@ -96,23 +96,30 @@ router.post("/signin", async (req, res) => {
   });
 });
 
-const updateSchema = zod.object({
+//////// updateUser info route
+const updateBody = zod.object({
   password: zod.string().optional(),
   firstName: zod.string().optional(),
   lastName: zod.string().optional(),
 });
 
-//////// updateUser info route
 router.put("/", authMiddleware, async (req, res) => {
-  const { success } = updateSchema.safeParse(req.body);
+  const { success } = updateBody.safeParse(req.body);
   if (!success) {
-    return res.status(400).json({
+    res.status(411).json({
       message: "Error while updating information",
     });
   }
 
-  await User.update({ _id: req.userId }, req.body);
-  res.status(200).json({
+  console.log(await User.find({ _id: req.userId }));
+
+  await User.updateOne(req.body, {
+    _id: req.userId,
+  });
+
+  console.log(await User.find({ _id: req.userId }));
+
+  res.json({
     message: "Updated successfully",
   });
 });
