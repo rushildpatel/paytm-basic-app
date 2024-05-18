@@ -34,8 +34,8 @@ const Signup = () => {
           <SubHeading label={"Enter your infromation to create an account"} />
           <InputBox onChange={(e) => setFirstName(e.target.value)} placeholder="John" label={"First Name"} />
           <InputBox onChange={(e) => setLastName(e.target.value)} placeholder="Doe" label={"Last Name"} />
-          <InputBox onChange={(e) => setEmail(e.target.value)} placeholder="jdoe@email.com" label={"Email"} />
-          <InputBox onChange={(e) => setPassword(e.target.value)} placeholder="jdrocks" label={"Password"} />
+          <InputBox onChange={(e) => setEmail(e.target.value)} placeholder="jdoe@email.com" label={"Email"} type="email" />
+          <InputBox onChange={(e) => setPassword(e.target.value)} placeholder="jdrocks" label={"Password"} type="password" />
           <div className="pt-4">
             <Button label={"Sign up"} onClick={onClick} />
           </div>

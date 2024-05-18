@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
 
   async function onClick() {
     const response = await axios.post("http://localhost:3000/api/v1/user/signin", {
@@ -35,6 +35,7 @@ function Signin() {
             }}
             placeholder="jdoe@email.com"
             label={"Email"}
+            type={"email"}
           />
           <InputBox
             onChange={(e) => {
@@ -42,6 +43,7 @@ function Signin() {
             }}
             placeholder="jdrocks"
             label={"Password"}
+            type="password"
           />
           <div className="pt-4">
             <Button onClick={onClick} label={"Sign in"} />
