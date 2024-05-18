@@ -3,7 +3,7 @@ import User from "./User";
 import axios from "axios";
 
 export default function Users() {
-  const [users, setUsers] = useState([{ firstName: "Rushil", lastName: "Patel", _id: 1 }]);
+  const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function Users() {
         .then((response) => {
           setUsers(response.data.user);
         });
-    }, 2000);
+    }, 1300);
     return () => clearTimeout(getData);
   }, [filter]);
 

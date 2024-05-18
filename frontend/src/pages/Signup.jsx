@@ -5,12 +5,14 @@ import Button from "../components/Button";
 import ButtonWarning from "../components/ButtonWarning";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate("");
 
   async function onClick() {
     const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
@@ -20,6 +22,7 @@ const Signup = () => {
       password: password,
     });
     localStorage.setItem("token", response.data.token);
+    navigate("/dashboard");
     // localStorage.setItem("currentUserId", )
   }
 

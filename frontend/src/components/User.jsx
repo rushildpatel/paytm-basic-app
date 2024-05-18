@@ -1,6 +1,9 @@
 import Button from "./Button";
+import { useNavigate } from "react-router-dom";
 
 export default function User({ user }) {
+  const navigate = useNavigate();
+
   return (
     <div className="flex justify-between">
       <div className="flex">
@@ -15,7 +18,12 @@ export default function User({ user }) {
       </div>
 
       <div className="flex flex-col justify-center h-ful">
-        <Button label={"Send Money"} />
+        <Button
+          onClick={(e) => {
+            navigate("/sendmoney?id=" + user._id + "&name=" + user.firstName);
+          }}
+          label={"Send Money"}
+        />
       </div>
     </div>
   );
