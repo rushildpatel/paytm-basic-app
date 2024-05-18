@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import User from "./User";
+import axios from "axios";
 
 export default function Users() {
   const [users, setUsers] = useState([{ firstName: "Rushil", lastName: "Patel", _id: 1 }]);
+  const [filter, setFilter] = useState("");
 
   return (
     <div>
